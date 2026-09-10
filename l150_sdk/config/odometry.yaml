@@ -1,0 +1,6 @@
+pose_covariance_xy: 0.05
+pose_covariance_yaw: 0.05
+twist_covariance_xy: 0.05
+twist_covariance_yaw: 0.05
+max_dt: 0.5
+

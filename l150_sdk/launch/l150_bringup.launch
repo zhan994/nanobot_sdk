@@ -1,0 +1,62 @@
+<launch>
+  <!-- L150 底盘 SDK 总入口：串口、轮式里程计、外接 IMU 和手柄。 -->
+  <arg name="start_serial" default="true"/>
+  <arg name="start_odometry" default="true"/>
+  <arg name="start_imu" default="false"/>
+  <arg name="start_joystick" default="true"/>
+
+  <arg name="port" default="/dev/l150"/>
+  <arg name="imu_port" default="/dev/fdilink_ahrs"/>
+  <arg name="velocity_topic" default="/l150/velocity"/>
+  <arg name="odom_topic" default="/wheel_odom"/>
+  <arg name="odom_frame" default="odom"/>
+  <arg name="base_frame" default="base_link"/>
+  <arg name="publish_tf" default="false"/>
+
+  <arg name="start_test" default="false"/>
+  <arg name="linear_x" default="0.2"/>
+  <arg name="angular_z" default="0.0"/>
+
+  <arg name="joy_dev" default="/dev/input/js0"/>
+  <arg name="axis_linear" default="7"/>
+  <arg name="axis_angular" default="6"/>
+  <arg name="enable_button" default="0"/>
+  <arg name="scale_linear" default="0.3"/>
+  <arg name="scale_angular" default="1.5"/>
+
+  <include if="$(arg start_serial)"
+           file="$(find l150_sdk)/launch/l150_serial.launch">
+    <arg name="port" value="$(arg port)"/>
+  </include>
+
+  <include if="$(arg start_odometry)"
+           file="$(find l150_sdk)/launch/l150_odometry.launch">
+    <arg name="velocity_topic" value="$(arg velocity_topic)"/>
+    <arg name="odom_topic" value="$(arg odom_topic)"/>
+    <arg name="odom_frame" value="$(arg odom_frame)"/>
+    <arg name="base_frame" value="$(arg base_frame)"/>
+    <arg name="publish_tf" value="$(arg publish_tf)"/>
+    <arg name="start_imu" value="$(arg start_imu)"/>
+    <arg name="imu_port" value="$(arg imu_port)"/>
+  </include>
+
+  <node if="$(arg start_test)"
+        pkg="rostopic"
+        type="rostopic"
+        name="cmd_vel_test"
+        output="screen"
+        args="pub -r 10 /cmd_vel geometry_msgs/Twist
+              '{linear: {x: $(arg linear_x), y: 0.0, z: 0.0},
+                angular: {x: 0.0, y: 0.0, z: $(arg angular_z)}}'"/>
+
+  <include if="$(arg start_joystick)"
+           file="$(find l150_sdk)/launch/l150_joystart.launch">
+    <arg name="joy_dev" value="$(arg joy_dev)"/>
+    <arg name="axis_linear" value="$(arg axis_linear)"/>
+    <arg name="axis_angular" value="$(arg axis_angular)"/>
+    <arg name="enable_button" value="$(arg enable_button)"/>
+    <arg name="scale_linear" value="$(arg scale_linear)"/>
+    <arg name="scale_angular" value="$(arg scale_angular)"/>
+  </include>
+</launch>
+

@@ -1,0 +1,28 @@
+<launch>
+  <arg name="config_file" default="$(find l150_sdk)/config/odometry.yaml"/>
+  <arg name="velocity_topic" default="/l150/velocity"/>
+  <arg name="odom_topic" default="/wheel_odom"/>
+  <arg name="odom_frame" default="odom"/>
+  <arg name="base_frame" default="base_link"/>
+  <arg name="publish_tf" default="false"/>
+  <arg name="start_imu" default="false"/>
+  <arg name="imu_port" default="/dev/fdilink_ahrs"/>
+
+  <node pkg="l150_sdk"
+        type="l150_odometry_node"
+        name="l150_odometry"
+        output="screen">
+    <rosparam command="load" file="$(arg config_file)"/>
+    <param name="velocity_topic" value="$(arg velocity_topic)"/>
+    <param name="odom_topic" value="$(arg odom_topic)"/>
+    <param name="odom_frame" value="$(arg odom_frame)"/>
+    <param name="base_frame" value="$(arg base_frame)"/>
+    <param name="publish_tf" value="$(arg publish_tf)"/>
+  </node>
+
+  <include if="$(arg start_imu)"
+           file="$(find fdilink_ahrs)/launch/ahrs_driver.launch">
+    <arg name="port" value="$(arg imu_port)"/>
+  </include>
+</launch>
+

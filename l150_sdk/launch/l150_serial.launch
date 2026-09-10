@@ -1,0 +1,13 @@
+<launch>
+  <arg name="config_file" default="$(find l150_sdk)/config/l150.yaml"/>
+  <arg name="port" default="/dev/l150"/>
+
+  <node pkg="l150_sdk"
+        type="l150_serial_node"
+        name="l150_serial"
+        output="screen">
+    <rosparam command="load" file="$(arg config_file)"/>
+    <param name="port" value="$(arg port)"/>
+  </node>
+</launch>
+

@@ -1,0 +1,26 @@
+# Catkin and CMake outputs
+build/
+devel/
+install/
+logs/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# ROS runtime files
+*.bag
+*.bag.active
+*.log
+.ros/
+
+# Editors and operating systems
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
