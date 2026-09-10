@@ -1,0 +1,4 @@
+# Shared defaults. Launch arguments override device names and topic names.
+imu_frame: imu_link
+command_timeout: 0.5
+
